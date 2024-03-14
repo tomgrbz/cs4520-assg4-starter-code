@@ -15,24 +15,24 @@ sealed class Product {
     data class Equipment(
         val name: String,
         val expiryDate: String?,
-        val price: String
+        val price: Double
     ): Product()
     data class Food(
         val name: String,
         val expiryDate: String?,
-        val price: String
+        val price: Double
     ): Product()
 
     companion object {
-        fun create(name: Any?, type: Any?, expiryDate: Any?, price: Any?): Product? {
+        fun create(name: Any?, type: Any?, expiryDate: Any?, price: Double?): Product? {
             if (type == "Food") {
                 if (name != null) {
-                    return price?.let { Product.Food(name.toString(), expiryDate.toString(), it.toString()) }
+                    return price?.let { Product.Food(name.toString(), expiryDate.toString(), it) }
                 }
 
             } else {
                 if (name != null) {
-                    return price?.let { Product.Equipment(name.toString(), expiryDate.toString(), it.toString()) }
+                    return price?.let { Product.Equipment(name.toString(), expiryDate.toString(), it) }
                 }
 
             }

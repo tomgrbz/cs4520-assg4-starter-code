@@ -6,10 +6,12 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.Fragment
+import androidx.fragment.app.viewModels
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
+import com.cs4520.assignment4.application.ProductApplication
 import com.cs4520.assignment4.databinding.ProductListFragmentBinding
 import com.cs4520.assignment4.view_model.ProductListViewModel
 
@@ -18,7 +20,7 @@ class ProductListFragment: Fragment() {
     private lateinit var recyclerView: RecyclerView
     private lateinit var adapter: ProductListAdapter
     private lateinit var productListFragmentBinding: ProductListFragmentBinding
-    private lateinit var productListViewModel: ProductListViewModel
+    private val productListViewModel: ProductListViewModel by viewModels { ProductListViewModel.Factory }
 
 
     override fun onCreateView(
@@ -37,7 +39,10 @@ class ProductListFragment: Fragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        productListViewModel = ViewModelProvider(this).get(ProductListViewModel::class.java)
+        val appContainer = (activity?.application as ProductApplication).appContainer
+        context?.let { appContainer.createLocalDataSource(it) }
+        appContainer.createProductRepository()
+
 
         productListFragmentBinding.btnRefresh.setOnClickListener {
             productListViewModel.fetchProducts(1) // Fetch products for page 1

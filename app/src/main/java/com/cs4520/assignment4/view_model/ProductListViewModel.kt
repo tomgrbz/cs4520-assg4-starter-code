@@ -14,8 +14,8 @@ import androidx.lifecycle.viewModelScope
 import androidx.lifecycle.viewmodel.CreationExtras
 import androidx.lifecycle.viewmodel.ViewModelFactoryDsl
 import androidx.room.Room
+import com.cs4520.assignment4.application.ProductApplication
 import com.cs4520.assignment4.data_layer.Api
-import com.cs4520.assignment4.data_layer.Database
 import com.cs4520.assignment4.data_layer.IProductApi
 import com.cs4520.assignment4.data_layer.ProductRepository
 import com.cs4520.assignment4.model.Product
@@ -23,27 +23,22 @@ import kotlinx.coroutines.launch
 import retrofit2.Retrofit
 import retrofit2.converter.gson.GsonConverterFactory
 
-class ProductListViewModel() : ViewModel() {
+class ProductListViewModel(private val repository: ProductRepository) : ViewModel() {
 
 
     private val _products = MutableLiveData<List<Product>>()
     val products: LiveData<List<Product>> = _products
 
-    private val db: Database by lazy {
-        Room.databaseBuilder(context, Database::class.java, "productsDB").build()
-    }
+
 
     fun fetchProducts(page: Int?) {
 
-
-        val repository = ProductRepository(Api.apiService, db)
         viewModelScope.launch {
             try {
                 Log.i("ProductListViewModel", "Fetching product list from API")
                 val response: List<Product> =
                     repository.getProducts(page)
-                        .map { Product.create(it.name, it.type, it.expiryDate, it.price)!! }
-                Log.i("PrdouctListViewModel", response.toString())
+                Log.i("ProductListViewModel", response.toString())
                 _products.postValue(response)
             } catch (e: Exception) {
                 // Handle error
@@ -53,18 +48,18 @@ class ProductListViewModel() : ViewModel() {
             }
         }
     }
-//    companion object {
-//        val Factory: ViewModelProvider.Factory = object: ViewModelProvider.Factory {
-//            @Suppress("UNCHECKED_CAST")
-//            override fun <T : ViewModel> create(modelClass: Class<T>, extras: CreationExtras): T {
-//
-//                val application = checkNotNull(extras[APPLICATION_KEY])
-//
-//                val savedStateHandle = extras.createSavedStateHandle()
-//                return ProductListViewModel((application as Application).repository,) as T
-//            }
-//        }
-//    }
+    companion object {
+        val Factory: ViewModelProvider.Factory = object: ViewModelProvider.Factory {
+            @Suppress("UNCHECKED_CAST")
+            override fun <T : ViewModel> create(modelClass: Class<T>, extras: CreationExtras): T {
+
+                val application = checkNotNull(extras[APPLICATION_KEY])
+
+                val savedStateHandle = extras.createSavedStateHandle()
+                return ProductListViewModel((application as ProductApplication).appContainer.productRepository,) as T
+            }
+        }
+    }
 }
 
 

@@ -38,6 +38,7 @@ android {
 
     viewBinding {
         enabled = true
+        freeCompilerArgs += ["-Xjvm-default=compatibility"]
     }
 }
 
