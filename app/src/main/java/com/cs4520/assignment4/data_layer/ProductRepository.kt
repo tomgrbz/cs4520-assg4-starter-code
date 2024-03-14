@@ -17,7 +17,7 @@ class ProductRepository(private val apiService: IProductApi, private val db: Loc
             try {
                 val respToProducts = resp.body()!!
                     .map { Product.create(it.name, it.type, it.expiryDate, it.price)!! }
-                insertProducts(respToProducts)
+                //insertProducts(respToProducts)
                 return respToProducts
             } catch (e: IllegalAccessException) {
                 Log.e("ProductRepo", "Failed to map products")

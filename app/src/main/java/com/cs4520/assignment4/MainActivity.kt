@@ -4,6 +4,7 @@ import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import androidx.navigation.NavController
 import androidx.navigation.fragment.NavHostFragment
+import com.cs4520.assignment4.application.ProductApplication
 import com.cs4520.assignment4.databinding.MainActivityBinding
 
 class MainActivity : AppCompatActivity() {
@@ -16,6 +17,7 @@ class MainActivity : AppCompatActivity() {
         setContentView(binding.root)
 
         val navHostFragment = supportFragmentManager.findFragmentById(R.id.nav_host_fragment) as NavHostFragment
+        // val appContainer = (application as ProductApplication).appContainer
         navController = navHostFragment.navController
 
     }
