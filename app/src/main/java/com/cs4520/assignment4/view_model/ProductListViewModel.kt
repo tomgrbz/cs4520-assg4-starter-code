@@ -16,25 +16,19 @@ import retrofit2.converter.gson.GsonConverterFactory
 class ProductListViewModel : ViewModel() {
 
 
-    private val retrofit: Retrofit by lazy {
-        Retrofit.Builder()
-            .baseUrl(Api.BASE_URL)
-            .addConverterFactory(GsonConverterFactory.create())
-            .build()
-    }
-
     private val _products = MutableLiveData<List<Product>>()
     val products: LiveData<List<Product>> = _products
 
     fun fetchProducts(page: Int?) {
-        val apiService = retrofit.create(IProductApi::class.java)
 
-        val repository = ProductRepository(apiService)
+
+        val repository = ProductRepository(Api.apiService)
         viewModelScope.launch {
             try {
                 Log.i("ProductListViewModel", "Fetching product list from API")
                 val response: List<Product> =
-                    repository.getProducts(page).map { Product.create(it.name, it.type, it.expiryDate, it.price)!! }
+                    repository.getProducts(page)
+                        .map { Product.create(it.name, it.type, it.expiryDate, it.price)!! }
                 Log.i("PrdouctListViewModel", response.toString())
                 _products.postValue(response)
             } catch (e: Exception) {

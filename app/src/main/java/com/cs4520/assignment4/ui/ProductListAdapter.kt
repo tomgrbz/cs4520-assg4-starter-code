@@ -51,8 +51,6 @@ class ProductViewHolder(itemView: View): RecyclerView.ViewHolder(itemView) {
             is Product.Food -> "$" + product.price
         }
 
-
-
         if (product is Product.Food) {
             productExpiryDateTextView.visibility = if (product.expiryDate != null) View.VISIBLE else View.GONE
             productExpiryDateTextView.text = product.expiryDate ?: ""
