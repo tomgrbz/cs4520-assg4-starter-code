@@ -19,7 +19,9 @@ import com.cs4520.assignment4.data_layer.Api
 import com.cs4520.assignment4.data_layer.IProductApi
 import com.cs4520.assignment4.data_layer.ProductRepository
 import com.cs4520.assignment4.model.Product
+import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
+import kotlinx.coroutines.withContext
 import retrofit2.Retrofit
 import retrofit2.converter.gson.GsonConverterFactory
 
@@ -40,12 +42,20 @@ class ProductListViewModel(private val repository: ProductRepository) : ViewMode
                     repository.getProducts(page)
                 Log.i("ProductListViewModel", response.toString())
                 _products.postValue(response)
+                try {
+                    withContext(Dispatchers.IO) {
+                        repository.insertProducts(response)
+                    }
+                } catch (e: Exception) {
+                    Log.e("ProductListViewModel", e.toString())
+                }
             } catch (e: Exception) {
                 // Handle error
                 Log.e("Error: ProductListViewModel", e.toString())
                 _products.postValue(emptyList())
 
             }
+
         }
     }
     companion object {

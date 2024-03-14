@@ -40,7 +40,7 @@ class ProductListFragment: Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         val appContainer = (activity?.application as ProductApplication).appContainer
-        context?.let { appContainer.createLocalDataSource(it) }
+        activity?.application?.applicationContext?.let { appContainer.createLocalDataSource(it) }
         appContainer.createProductRepository()
 
 
