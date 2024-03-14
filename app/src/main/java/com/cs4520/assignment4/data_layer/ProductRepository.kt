@@ -5,7 +5,7 @@ import com.cs4520.assignment4.model.Product
 import com.cs4520.assignment4.model.ProductResponse
 import retrofit2.awaitResponse
 
-class ProductRepository(private val apiService: IProductApi) {
+class ProductRepository(private val apiService: IProductApi, db: Database) {
 
      suspend fun getProducts(page: Int?): List<ProductResponse> {
 
@@ -16,5 +16,9 @@ class ProductRepository(private val apiService: IProductApi) {
          }
          Log.e("ProductRepo", "Failed to fetch any records from API")
         return emptyList()
+    }
+
+    private fun insertProducts(products: List<Product>) {
+        db.productDao()
     }
 }

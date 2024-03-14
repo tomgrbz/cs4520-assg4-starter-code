@@ -44,7 +44,6 @@ class ProductListFragment: Fragment() {
         }
         observeProducts()
         productListViewModel.fetchProducts(1)
-
     }
 
     private fun observeProducts() {
