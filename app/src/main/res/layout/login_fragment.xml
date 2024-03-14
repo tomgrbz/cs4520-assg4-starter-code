@@ -8,6 +8,7 @@
     <EditText
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        android:layout_margin="15dp"
         android:id="@+id/usernameEditText"
         android:hint="@string/username"/>
 
@@ -15,6 +16,7 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:id="@+id/passwordEditText"
+        android:layout_margin="15dp"
         android:hint="@string/password"
         android:inputType="textPassword"/>
     <Button
