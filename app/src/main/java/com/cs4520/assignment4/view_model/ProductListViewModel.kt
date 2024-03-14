@@ -9,9 +9,6 @@ import com.cs4520.assignment4.data_layer.Api
 import com.cs4520.assignment4.data_layer.IProductApi
 import com.cs4520.assignment4.data_layer.ProductRepository
 import com.cs4520.assignment4.model.Product
-import com.cs4520.assignment4.model.ProductDeserializer
-import com.google.gson.Gson
-import com.google.gson.GsonBuilder
 import kotlinx.coroutines.launch
 import retrofit2.Retrofit
 import retrofit2.converter.gson.GsonConverterFactory
@@ -19,36 +16,31 @@ import retrofit2.converter.gson.GsonConverterFactory
 class ProductListViewModel : ViewModel() {
 
 
-    private val gson: Gson by lazy {
-        val gson = GsonBuilder().registerTypeAdapter(Product::class.java, ProductDeserializer()).create()
-        gson
-    }
     private val retrofit: Retrofit by lazy {
         Retrofit.Builder()
             .baseUrl(Api.BASE_URL)
-            .addConverterFactory(GsonConverterFactory.create(gson))
+            .addConverterFactory(GsonConverterFactory.create())
             .build()
     }
 
-
-
-
-    private val apiService = retrofit.create(IProductApi::class.java)
-
-    private val repository = ProductRepository(apiService)
     private val _products = MutableLiveData<List<Product>>()
     val products: LiveData<List<Product>> = _products
 
-    fun fetchProducts(page: Int) {
+    fun fetchProducts(page: Int?) {
+        val apiService = retrofit.create(IProductApi::class.java)
+
+        val repository = ProductRepository(apiService)
         viewModelScope.launch {
             try {
                 Log.i("ProductListViewModel", "Fetching product list from API")
-                val response = repository.getProducts(page)
+                val response: List<Product> =
+                    repository.getProducts(page).map { Product.create(it.name, it.type, it.expiryDate, it.price)!! }
                 Log.i("PrdouctListViewModel", response.toString())
                 _products.postValue(response)
             } catch (e: Exception) {
                 // Handle error
                 Log.e("Error: ProductListViewModel", e.toString())
+                _products.postValue(emptyList())
 
             }
         }

@@ -1,6 +1,7 @@
 package com.cs4520.assignment4.ui
 
 import android.os.Bundle
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -38,17 +39,18 @@ class ProductListFragment: Fragment() {
         super.onViewCreated(view, savedInstanceState)
         productListViewModel = ViewModelProvider(this).get(ProductListViewModel::class.java)
 
-
+        productListFragmentBinding.btnRefresh.setOnClickListener {
+            productListViewModel.fetchProducts(1) // Fetch products for page 1
+        }
         observeProducts()
         productListViewModel.fetchProducts(1)
-
-
 
     }
 
     private fun observeProducts() {
         productListViewModel.products.observe(viewLifecycleOwner, Observer {
             if (it.isNotEmpty()) {
+                Log.i("ProductFragment", "Seting list to $it")
                 adapter.setList(it)
                 productListFragmentBinding.progressBar.visibility = View.GONE
                 productListFragmentBinding.txtMessage.visibility = View.GONE

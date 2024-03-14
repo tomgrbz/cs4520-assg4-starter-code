@@ -5,53 +5,39 @@ import com.google.gson.JsonDeserializer
 import com.google.gson.JsonElement
 import com.google.gson.JsonObject
 import com.google.gson.annotations.SerializedName
+import java.lang.RuntimeException
 import java.lang.reflect.Type
 
-sealed class Product(
-    @SerializedName("name")
-    val name: String,
-    @SerializedName("expiryDate")
-    val expiryDate: String?,
-    @SerializedName("price")
-    val price: Int,
-    @SerializedName("type")
-    val type: String
-) {
+
+
+sealed class Product {
 
     data class Equipment(
-        val equipmentName: String,
-        val equipmentDate: String?,
-        val equipmentPrice: Int
-    ): Product(equipmentName, equipmentDate, equipmentPrice, "equipment")
+        val name: String,
+        val expiryDate: String?,
+        val price: String
+    ): Product()
     data class Food(
-        val foodName: String,
-        val foodDate: String,
-        val foodPrice: Int,
-    ): Product(foodName, foodDate, foodPrice, "food")
+        val name: String,
+        val expiryDate: String?,
+        val price: String
+    ): Product()
 
     companion object {
-        fun create(name: String, type: String, expiryDate: String, price: Int): Product {
-            if (type == "Equipment") {
-                return Product.Equipment(name, type, price)
+        fun create(name: Any?, type: Any?, expiryDate: Any?, price: Any?): Product? {
+            if (type == "Food") {
+                if (name != null) {
+                    return price?.let { Product.Food(name.toString(), expiryDate.toString(), it.toString()) }
+                }
+
             } else {
-                return Product.Food(name, type, price)
+                if (name != null) {
+                    return price?.let { Product.Equipment(name.toString(), expiryDate.toString(), it.toString()) }
+                }
+
             }
+            return null
         }
     }
 }
 
-class ProductDeserializer: JsonDeserializer<Product> {
-    override fun deserialize(
-        json: JsonElement?,
-        typeOfT: Type?,
-        context: JsonDeserializationContext?
-    ): Product {
-        if (json.isJsonObject) {
-
-        }
-        val jsonObj: JsonObject = json!!.asJsonObject
-
-        return Product.create(jsonObj.get("name").asString, jsonObj.get("type").asString, jsonObj.get("expiryDate").asString, jsonObj.get("price").asInt)
-    }
-
-}

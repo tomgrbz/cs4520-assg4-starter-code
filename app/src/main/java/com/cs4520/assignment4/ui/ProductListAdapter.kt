@@ -51,13 +51,16 @@ class ProductViewHolder(itemView: View): RecyclerView.ViewHolder(itemView) {
             is Product.Food -> "$" + product.price
         }
 
+
+
         if (product is Product.Food) {
-            productExpiryDateTextView.visibility = View.VISIBLE
-            productExpiryDateTextView.text = product.foodDate ?: ""
+            productExpiryDateTextView.visibility = if (product.expiryDate != null) View.VISIBLE else View.GONE
+            productExpiryDateTextView.text = product.expiryDate ?: ""
             itemView.setBackgroundColor(itemView.context.resources.getColor(R.color.light_yellow, null))
             productImageView.setImageResource(R.drawable.food)
         } else if (product is Product.Equipment) {
-            productExpiryDateTextView.visibility = if (product.equipmentDate != null) View.VISIBLE else View.GONE
+
+            productExpiryDateTextView.visibility = View.GONE
             itemView.setBackgroundColor(itemView.context.resources.getColor(R.color.light_red, null))
             productImageView.setImageResource(R.drawable.equipment)
         }
