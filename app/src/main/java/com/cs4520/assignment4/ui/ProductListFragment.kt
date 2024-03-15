@@ -47,6 +47,9 @@ class ProductListFragment: Fragment() {
         productListFragmentBinding.btnRefresh.setOnClickListener {
             productListViewModel.fetchProducts(1) // Fetch products for page 1
         }
+        productListViewModel.isLoading.observe(viewLifecycleOwner) { isLoading ->
+            productListFragmentBinding.progressBar.visibility = if (isLoading) View.VISIBLE else View.GONE
+        }
         observeProducts()
         productListViewModel.fetchProducts(1)
     }

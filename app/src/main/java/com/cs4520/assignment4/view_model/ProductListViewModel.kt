@@ -31,10 +31,13 @@ class ProductListViewModel(private val repository: ProductRepository) : ViewMode
     private val _products = MutableLiveData<List<Product>>()
     val products: LiveData<List<Product>> = _products
 
+    private val _isLoading = MutableLiveData<Boolean>()
+    val isLoading: LiveData<Boolean> = _isLoading
+
 
 
     fun fetchProducts(page: Int?) {
-
+        _isLoading.value = true
         viewModelScope.launch {
             try {
                 Log.i("ProductListViewModel", "Fetching product list from API")
@@ -54,6 +57,8 @@ class ProductListViewModel(private val repository: ProductRepository) : ViewMode
                 Log.e("Error: ProductListViewModel", e.toString())
                 _products.postValue(emptyList())
 
+            } finally {
+                _isLoading.postValue(false)
             }
 
         }
