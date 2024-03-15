@@ -2,6 +2,7 @@ package com.cs4520.assignment4.view_model
 
 import android.app.Application
 import android.content.Context
+import android.net.ConnectivityManager
 import android.util.Log
 import androidx.lifecycle.AndroidViewModel
 import androidx.lifecycle.LiveData
@@ -63,6 +64,7 @@ class ProductListViewModel(private val repository: ProductRepository) : ViewMode
 
         }
     }
+
     companion object {
         val Factory: ViewModelProvider.Factory = object: ViewModelProvider.Factory {
             @Suppress("UNCHECKED_CAST")

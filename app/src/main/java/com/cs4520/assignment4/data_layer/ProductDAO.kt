@@ -8,10 +8,10 @@ import androidx.room.Query
 @Dao
 interface ProductDAO {
     @Query("SELECT * FROM products")
-    fun fetchAllProducts(): List<ProductEntity>
+    suspend fun fetchAllProducts(): List<ProductEntity>
 
     @Insert(onConflict = OnConflictStrategy.REPLACE)
-    fun insertAllProducts(products: List<ProductEntity>)
+    suspend fun insertAllProducts(products: List<ProductEntity>)
 
 
 }

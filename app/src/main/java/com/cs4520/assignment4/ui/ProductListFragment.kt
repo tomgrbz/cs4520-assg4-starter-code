@@ -41,7 +41,7 @@ class ProductListFragment: Fragment() {
         super.onViewCreated(view, savedInstanceState)
         val appContainer = (activity?.application as ProductApplication).appContainer
         activity?.application?.applicationContext?.let { appContainer.createLocalDataSource(it) }
-        appContainer.createProductRepository()
+        activity?.application?.applicationContext?.let { appContainer.createProductRepository(it) }
 
 
         productListFragmentBinding.btnRefresh.setOnClickListener {
