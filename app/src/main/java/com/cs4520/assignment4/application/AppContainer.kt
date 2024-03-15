@@ -20,11 +20,9 @@ class AppContainer {
     fun createLocalDataSource(context: Context) {
         localDataSource = Room.databaseBuilder(context, LocalDatabase::class.java, "productsDB").build()
     }
-
     fun createProductRepository(context: Context) {
         if (!instance && this::localDataSource.isInitialized) {
             productRepository = ProductRepository(remoteDataSource, localDataSource, context)
         }
     }
-
 }

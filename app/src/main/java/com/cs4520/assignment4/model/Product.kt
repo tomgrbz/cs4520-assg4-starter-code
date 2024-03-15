@@ -27,12 +27,12 @@ sealed class Product {
         fun create(name: Any?, type: Any?, expiryDate: Any?, price: Double?): Product? {
             if (type == "Food") {
                 if (name != null) {
-                    return price?.let { Product.Food(name.toString(), expiryDate.toString(), it) }
+                    return price?.let { Food(name.toString(), expiryDate.toString(), it) }
                 }
 
             } else {
                 if (name != null) {
-                    return price?.let { Product.Equipment(name.toString(), expiryDate.toString(), it) }
+                    return price?.let { Equipment(name.toString(), expiryDate.toString(), it) }
                 }
 
             }
