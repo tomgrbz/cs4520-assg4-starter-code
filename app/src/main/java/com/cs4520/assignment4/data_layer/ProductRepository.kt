@@ -15,15 +15,31 @@ import java.lang.Exception
 class ProductRepository(private val apiService: IProductApi, private val db: LocalDatabase, private val context: Context) {
 
     suspend fun getProducts(page: Int?): List<Product> {
+        val setOfProducts: MutableSet<Product> = mutableSetOf()
         if (checkNetworkConn()) {
             val resp = apiService.getProducts(page)
             Log.i("ProductRepo", "Fetched records: ${resp.toString()}")
             if (resp.isSuccessful && resp.body() != null) {
                 try {
+                    // Fetch products from API and attempt to create valid Product representations
                     val respToProducts = resp.body()!!
                         .map { Product.create(it.name, it.type, it.expiryDate, it.price)!! }
-                    // insertProducts(respToProducts)
-                    return respToProducts
+                    // Filter out any duplicates from api
+                    for (product in respToProducts) {
+                        if (!setOfProducts.any {Product.compareProduct(product, it)}) {
+                            setOfProducts.add(product)
+                        }
+                    }
+                    // Insert set of products in DB
+                    try {
+                        withContext(Dispatchers.IO) {
+                            insertProducts(setOfProducts.toList())
+                        }
+                    } catch (e: Exception) {
+                        Log.e("ProductListViewModel", e.toString())
+                    }
+                    Log.i("ProductRepo", "Fetched records: original size: ${respToProducts.size} set size: ${setOfProducts.size} ")
+                    return setOfProducts.toList()
                 } catch (e: IllegalAccessException) {
                     Log.e("ProductRepo", "Failed to map products")
                 } catch (e: Exception) {
@@ -33,6 +49,7 @@ class ProductRepository(private val apiService: IProductApi, private val db: Loc
             }
         }
         else {
+            Log.i("Product repo", "returning DB Records " )
             return withContext(Dispatchers.IO) {
                 getProductsFromDB()
             }

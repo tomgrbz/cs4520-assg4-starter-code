@@ -63,10 +63,9 @@ class ProductListFragment: Fragment() {
                 productListFragmentBinding.txtMessage.visibility = View.GONE
                 productListFragmentBinding.recyclerView.visibility = View.VISIBLE
             } else {
-                productListFragmentBinding.progressBar.visibility = View.GONE
+//                productListFragmentBinding.progressBar.visibility = View.GONE
                 productListFragmentBinding.recyclerView.visibility = View.GONE
                 productListFragmentBinding.txtMessage.visibility = View.VISIBLE
-                productListFragmentBinding.txtMessage.text = "No products available"
             }
         })
     }

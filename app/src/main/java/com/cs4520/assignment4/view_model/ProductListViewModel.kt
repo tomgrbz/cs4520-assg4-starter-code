@@ -45,21 +45,14 @@ class ProductListViewModel(private val repository: ProductRepository) : ViewMode
                 val response: List<Product> =
                     repository.getProducts(page)
                 Log.i("ProductListViewModel", response.toString())
-                _products.postValue(response)
-                try {
-                    withContext(Dispatchers.IO) {
-                        repository.insertProducts(response)
-                    }
-                } catch (e: Exception) {
-                    Log.e("ProductListViewModel", e.toString())
-                }
+                _products.value = response
             } catch (e: Exception) {
                 // Handle error
                 Log.e("Error: ProductListViewModel", e.toString())
-                _products.postValue(emptyList())
+                _products.value = emptyList()
 
             } finally {
-                _isLoading.postValue(false)
+                _isLoading.value = false
             }
 
         }
