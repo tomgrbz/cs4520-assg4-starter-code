@@ -1,30 +1,17 @@
 package com.cs4520.assignment4.view_model
 
-import android.app.Application
-import android.content.Context
-import android.net.ConnectivityManager
 import android.util.Log
-import androidx.lifecycle.AndroidViewModel
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.ViewModelProvider.AndroidViewModelFactory.Companion.APPLICATION_KEY
-import androidx.lifecycle.createSavedStateHandle
 import androidx.lifecycle.viewModelScope
 import androidx.lifecycle.viewmodel.CreationExtras
-import androidx.lifecycle.viewmodel.ViewModelFactoryDsl
-import androidx.room.Room
 import com.cs4520.assignment4.application.ProductApplication
-import com.cs4520.assignment4.data_layer.Api
-import com.cs4520.assignment4.data_layer.IProductApi
 import com.cs4520.assignment4.data_layer.ProductRepository
 import com.cs4520.assignment4.model.Product
-import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
-import kotlinx.coroutines.withContext
-import retrofit2.Retrofit
-import retrofit2.converter.gson.GsonConverterFactory
 
 class ProductListViewModel(private val repository: ProductRepository) : ViewModel() {
 
