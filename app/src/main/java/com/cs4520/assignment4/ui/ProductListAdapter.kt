@@ -9,7 +9,7 @@ import androidx.recyclerview.widget.RecyclerView
 import com.cs4520.assignment4.R
 import com.cs4520.assignment4.model.Product
 
-class ProductListAdapter: RecyclerView.Adapter<ProductViewHolder>() {
+class ProductListAdapter : RecyclerView.Adapter<ProductViewHolder>() {
 
     private lateinit var products: List<Product>
 
@@ -35,31 +35,43 @@ class ProductListAdapter: RecyclerView.Adapter<ProductViewHolder>() {
 
 }
 
-class ProductViewHolder(itemView: View): RecyclerView.ViewHolder(itemView) {
+class ProductViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
     private val productNameTextView: TextView = itemView.findViewById(R.id.productNameTextView)
     private val productPriceTextView: TextView = itemView.findViewById(R.id.productPriceTextView)
-    private val productExpiryDateTextView: TextView = itemView.findViewById(R.id.productExpiryDateTextView)
+    private val productExpiryDateTextView: TextView =
+        itemView.findViewById(R.id.productExpiryDateTextView)
     private val productImageView: ImageView = itemView.findViewById(R.id.productImageView)
 
     fun bind(product: Product) {
-        productNameTextView.text = when(product) {
+        productNameTextView.text = when (product) {
             is Product.Equipment -> product.name
             is Product.Food -> product.name
         }
-        productPriceTextView.text = when(product) {
+        productPriceTextView.text = when (product) {
             is Product.Equipment -> "$" + product.price
             is Product.Food -> "$" + product.price
         }
 
         if (product is Product.Food) {
-            productExpiryDateTextView.visibility = if (product.expiryDate != null) View.VISIBLE else View.GONE
+            productExpiryDateTextView.visibility =
+                if (product.expiryDate != null) View.VISIBLE else View.GONE
             productExpiryDateTextView.text = product.expiryDate ?: ""
-            itemView.setBackgroundColor(itemView.context.resources.getColor(R.color.light_yellow, null))
+            itemView.setBackgroundColor(
+                itemView.context.resources.getColor(
+                    R.color.light_yellow,
+                    null
+                )
+            )
             productImageView.setImageResource(R.drawable.food)
         } else if (product is Product.Equipment) {
 
             productExpiryDateTextView.visibility = View.GONE
-            itemView.setBackgroundColor(itemView.context.resources.getColor(R.color.light_red, null))
+            itemView.setBackgroundColor(
+                itemView.context.resources.getColor(
+                    R.color.light_red,
+                    null
+                )
+            )
             productImageView.setImageResource(R.drawable.equipment)
         }
     }

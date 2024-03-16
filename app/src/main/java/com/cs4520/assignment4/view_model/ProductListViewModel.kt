@@ -36,37 +36,38 @@ class ProductListViewModel(private val repository: ProductRepository) : ViewMode
     val isLoading: LiveData<Boolean> = _isLoading
 
 
-
     fun fetchProducts(page: Int?) {
+        // Loading bar should start to spin
         _isLoading.value = true
         viewModelScope.launch {
             try {
-                Log.i("ProductListViewModel", "Fetching product list from API")
+                // Fetch from API, on failure will return DB records instead to display in View
                 val response: List<Product> =
                     repository.getProducts(page)
-                Log.i("ProductListViewModel", response.toString())
                 _products.value = response
             } catch (e: Exception) {
-                // Handle error
+                // Handle error, setting value of list to empty
                 Log.e("Error: ProductListViewModel", e.toString())
                 _products.value = emptyList()
 
             } finally {
+                // On failure or success, sets loading bar to stop
                 _isLoading.value = false
             }
 
         }
     }
 
+    /**
+     * Factory companion object to instantiate in the ProductFragmentList
+     */
     companion object {
-        val Factory: ViewModelProvider.Factory = object: ViewModelProvider.Factory {
+        val Factory: ViewModelProvider.Factory = object : ViewModelProvider.Factory {
             @Suppress("UNCHECKED_CAST")
             override fun <T : ViewModel> create(modelClass: Class<T>, extras: CreationExtras): T {
 
                 val application = checkNotNull(extras[APPLICATION_KEY])
-
-                val savedStateHandle = extras.createSavedStateHandle()
-                return ProductListViewModel((application as ProductApplication).appContainer.productRepository,) as T
+                return ProductListViewModel((application as ProductApplication).appContainer.productRepository) as T
             }
         }
     }

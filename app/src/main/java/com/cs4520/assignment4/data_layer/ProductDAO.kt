@@ -5,6 +5,9 @@ import androidx.room.Insert
 import androidx.room.OnConflictStrategy
 import androidx.room.Query
 
+/**
+ * DAO Object
+ */
 @Dao
 interface ProductDAO {
     @Query("SELECT * FROM products")

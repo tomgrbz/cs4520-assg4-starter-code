@@ -3,6 +3,10 @@ package com.cs4520.assignment4.model
 import com.cs4520.assignment4.data_layer.ProductEntity
 import java.lang.IllegalArgumentException
 
+/**
+ * Mapper class consisting of two static functions to map from Product to ProductEntity and
+ * from ProductEntity to Product
+ */
 class ProductToDAOMapper {
 
     companion object {

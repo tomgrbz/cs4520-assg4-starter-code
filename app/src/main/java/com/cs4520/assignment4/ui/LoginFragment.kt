@@ -12,7 +12,7 @@ import androidx.navigation.Navigation
 import com.cs4520.assignment4.R
 import com.cs4520.assignment4.databinding.LoginFragmentBinding
 
-class LoginFragment: Fragment() {
+class LoginFragment : Fragment() {
 
     private lateinit var usernameEditText: EditText
     private lateinit var passwordEditText: EditText
@@ -41,7 +41,11 @@ class LoginFragment: Fragment() {
                 passwordEditText.text.clear()
                 nav.navigate(R.id.action_loginFragment_to_productListFragment)
             } else {
-                Toast.makeText(requireContext(), "Incorrect username or password", Toast.LENGTH_LONG).show()
+                Toast.makeText(
+                    requireContext(),
+                    "Incorrect username or password",
+                    Toast.LENGTH_LONG
+                ).show()
             }
 
         }

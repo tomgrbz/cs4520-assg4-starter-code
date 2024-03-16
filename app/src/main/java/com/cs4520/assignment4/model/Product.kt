@@ -1,14 +1,5 @@
 package com.cs4520.assignment4.model
 
-import android.media.audiofx.DynamicsProcessing.Eq
-import com.google.gson.JsonDeserializationContext
-import com.google.gson.JsonDeserializer
-import com.google.gson.JsonElement
-import com.google.gson.JsonObject
-import com.google.gson.annotations.SerializedName
-import java.lang.RuntimeException
-import java.lang.reflect.Type
-
 
 sealed class Product {
 
@@ -25,6 +16,8 @@ sealed class Product {
     ) : Product()
 
     companion object {
+        // Creates a Food or equipment based on given type, othewise null. Used for validating
+        // from API
         fun create(name: Any?, type: Any?, expiryDate: Any?, price: Double?): Product? {
             if (type == "Food") {
                 if (name != null && price != null && expiryDate != null) {
@@ -40,6 +33,7 @@ sealed class Product {
             return null
         }
 
+        // Compares two products based on type, followed by name and price
         fun compareProduct(product1: Product, product2: Product): Boolean {
             if (product1 is Food) {
                 if (product2 !is Food) {
